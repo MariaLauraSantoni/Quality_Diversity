@@ -11,26 +11,29 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
     lower_bound =  [lb]* dimension # Esempio di limiti inferiori
     upper_bound = [ub]* dimension   # Esempio di limiti superiori
     # Genera il campione LHS
-    lhs_sample = lhs(dimension, samples=initial_size, criterion='maximin')
-    # Scala il campione LHS nei limiti specificati
-    scaled_lhs_sample = np.zeros_like(lhs_sample)
+    # lhs_sample = lhs(dimension, samples=initial_size, criterion='maximin')
+    # # Scala il campione LHS nei limiti specificati
+    # random_sample = np.zeros_like(lhs_sample)
 
-    for i in range(dimension):
-        scaled_lhs_sample[:, i] = lower_bound[i] + lhs_sample[:, i] * (upper_bound[i] - lower_bound[i])
-    # Stampare il campione generato
-    #print("Campione LHS generato:")
-    #print(scaled_lhs_sample)
+    # for i in range(dimension):
+    #     random_sample[:, i] = lower_bound[i] + lhs_sample[:, i] * (upper_bound[i] - lower_bound[i])
+    # # Stampare il campione generato
+    # #print("Campione LHS generato:")
+    # #print(random_sample)
+
+    # Crea un campione di punti casuali
+    random_sample = np.random.uniform(low=lower_bound, high=upper_bound, size=(initial_size, dimension))
 
     # Evaluate f on each point of the sample
     f = get_problem(function, instance, dimension, ProblemClass.BBOB)
     values = np.array([])
-    for i in scaled_lhs_sample:
+    for i in random_sample:
         values = np.append(values, f(i))
     # Ottieni gli indici per il riordino
     ind= np.argsort(values)
     # Applica il riordino agli array di punti e punti legati
     values_ord = values[ind]
-    sample_ord = scaled_lhs_sample[ind]
+    sample_ord = random_sample[ind]
     loss = values_ord - f.optimum.y
     # Calcolo average value of the function loss tra i primi 20 valori migliori LEI LA VOGLIO SALVARE IN UN FILE OGNI ITERAZIONE
     mean_loss = np.mean(loss[:size_best])
@@ -139,7 +142,7 @@ if __name__ == "__main__":
    # inp1 = 5
    # inp2 = 0
    # inp3 = 2
-   # inp4 = 100
+   # inp4 = 10000
    # inp5 = 20
    # inp6 = -5
    # inp7 = 5
