@@ -35,8 +35,8 @@ for run in {1..10}; do
     mkdir run_$run
     cd ..
 
-   # Esegui lo script Python con gli argomenti
-   python main.py "$function" "$instance" "$dimension" "$initial_size" "$best_size" "$lb" "$ub" "$iterations"
-   mv 24_* results_$function/run_$run_$function
+    # Esegui lo script Python con gli argomenti
+    python main.py "$function" "$instance" "$dimension" "$initial_size" "$best_size" "$lb" "$ub" "$iterations"
+    mv ${function}_* results_$function/run_$run
 
 done
