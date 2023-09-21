@@ -10,8 +10,8 @@
 #SBATCH --mail-type=END,FAIL
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
-#SBATCH --output=boh.out
-#SBATCH --err=boh.err
+#SBATCH --output=script.out
+#SBATCH --err=script.err
 
 
 import sys
@@ -21,19 +21,19 @@ for run in {1..10}; do
     mkdir run_$run
 
     # Definisci gli argomenti per lo script Python
-    arg1="5"
-    arg2="0"
-    arg3="10"
-    arg4="1000"
-    arg5="20"
-    arg6="-5"
-    arg7="5"
-    arg8="10"
+    function="5"
+    instance="0"
+    dimension="2"
+    initial_size="100000"
+    best_size="5"
+    lb="-5"
+    ub="5"
+    iterations="1000"
    
 
 
    # Esegui lo script Python con gli argomenti
-   python main.py "$arg1" "$arg2" "$arg3" "$arg4" "$arg5" "$arg6" "$arg7" "$arg8"
-   mv $arg1* run_$run
+   python main.py "$function" "$instance" "$dimension" "$initial_size" "$best_size" "$lb" "$ub" "$iterations"
+   mv $function* run_$run
 
 done
