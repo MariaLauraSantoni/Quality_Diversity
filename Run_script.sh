@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=f1
+#SBATCH --job-name=f24
 #SBATCH --array=0-##jobs_count##
 #SBATCH --clusters=serial
 #SBATCH --partition=serial_std
@@ -16,7 +16,7 @@
 
 import sys
 
-function="1"
+function="24"
 
 mkdir results_$function
 for run in {1..10}; do
@@ -37,6 +37,6 @@ for run in {1..10}; do
 
    # Esegui lo script Python con gli argomenti
    python main.py "$function" "$instance" "$dimension" "$initial_size" "$best_size" "$lb" "$ub" "$iterations"
-   mv $function%_* results_$function/run_$run_$function
+   mv 24_* results_$function/run_$run_$function
 
 done
