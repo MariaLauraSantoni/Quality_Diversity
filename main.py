@@ -18,8 +18,8 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
     for i in range(dimension):
         scaled_lhs_sample[:, i] = lower_bound[i] + lhs_sample[:, i] * (upper_bound[i] - lower_bound[i])
     # Stampare il campione generato
-    print("Campione LHS generato:")
-    print(scaled_lhs_sample)
+    #print("Campione LHS generato:")
+    #print(scaled_lhs_sample)
 
     # Evaluate f on each point of the sample
     f = get_problem(function, instance, dimension, ProblemClass.BBOB)
@@ -34,7 +34,7 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
     loss = values_ord - f.optimum.y
     # Calcolo average value of the function loss tra i primi 20 valori migliori LEI LA VOGLIO SALVARE IN UN FILE OGNI ITERAZIONE
     mean_loss = np.mean(loss[:size_best])
-    print(mean_loss)
+    #print(mean_loss)
 
     # Supponiamo che 'punti' sia una matrice NumPy con ogni riga rappresentante un punto n-dimensionale.
     # Ad esempio, punti.shape sarà (numero_di_punti, n_dimensioni).
@@ -58,11 +58,11 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
         total_min_dist = np.min(min_dist)
         index = np.where(min_dist == total_min_dist)[0]
         #ALTRA COSA CHE VOGLIO STAMPARE POTREBBE ESSERE LEI LA MEDIA DEI VALORI IN MIN_DIST.
-        mean_dist = np.mean(min_dist)
+        #mean_dist = np.mean(min_dist)
         #QUI DEVO APRIRE IL FILE E STAMPARE TXT I DUE VALORI
         with open(str(function) + '_' + str(instance) + '_'  + str(dimension)+ '_' + str(initial_size) + '_' + str(size_best) + '_' + str(lb) + '_' + str(ub)+ '_' + str(iterations)+ '.txt', 'a') as file:
             # Scrivi i valori separati da uno spazio sulla stessa riga
-            line = f'{mean_dist} {mean_loss}\n'  # Usiamo '\n' per andare a capo dopo ogni riga
+            line = f'{total_min_dist} {mean_loss}\n'  # Usiamo '\n' per andare a capo dopo ogni riga
             file.write(line)
         #ORA E' IL MOMENTO DELLO SWAP
         loss_store = np.array([])
@@ -98,13 +98,15 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
                     # Aggiungere l'array modificato alla lista
                     new_array.append(array_new)
                     break
-        if not all(verified_cond):
+
+        if all(element is False for element in verified_cond):
             print(f"Could not find a point that satisfies the distance criterion during iteration {z}")
             break  # Passa all'iterazione successiva del ciclo esterno
+        elif all(element is True for element in verified_cond):
+            ind_loss = np.argmin(loss_store)
+        elif verified_cond.count(True) == 1:
+            ind_loss = verified_cond.index(True)
 
-
-
-        ind_loss = np.argmin(loss_store)
         loss = np.copy(loss)
         a = loss[index[ind_loss]]
         loss[index[ind_loss]] = loss_swap[ind_loss]
@@ -124,6 +126,7 @@ if __name__ == "__main__":
    # inp6 = int(input("lb: "))
    # inp7 = int(input("ub: "))
    # inp8 = int(input("iterations: "))
+
    inp1 = sys.argv[1]
    inp2 = sys.argv[2]
    inp3 = sys.argv[3]
@@ -132,6 +135,15 @@ if __name__ == "__main__":
    inp6 = sys.argv[6]
    inp7 = sys.argv[7]
    inp8 = sys.argv[8]
+
+   # inp1 = 5
+   # inp2 = 0
+   # inp3 = 2
+   # inp4 = 100
+   # inp5 = 20
+   # inp6 = -5
+   # inp7 = 5
+   # inp8 = 1000
    
 
    inp1 = int(inp1)
