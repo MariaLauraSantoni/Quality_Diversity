@@ -1,7 +1,7 @@
 import numpy as np
 from pyDOE2 import lhs
 from ioh import get_problem, ProblemClass
-
+import sys
 
 def quality_diversity(function, instance, dimension, initial_size, size_best, lb, ub, iterations):
     # Definisci il numero di campioni e la dimensione dello spazio
@@ -116,22 +116,30 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
 
 
 if __name__ == "__main__":
-    # inp1 = int(input("function: "))
-    # inp2 = int(input("instance: "))
-    # inp3 = int(input("dimension: "))
-    # inp4 = int(input("initial_size: "))
-    # inp5 = int(input("size_best: "))
-    # inp6 = int(input("lb: "))
-    # inp7 = int(input("ub: "))
-    # inp8 = int(input("iterations: "))
+   # inp1 = int(input("function: "))
+   # inp2 = int(input("instance: "))
+   # inp3 = int(input("dimension: "))
+   # inp4 = int(input("initial_size: "))
+   # inp5 = int(input("size_best: "))
+   # inp6 = int(input("lb: "))
+   # inp7 = int(input("ub: "))
+   # inp8 = int(input("iterations: "))
+   inp1 = sys.argv[1]
+   inp2 = sys.argv[2]
+   inp3 = sys.argv[3]
+   inp4 = sys.argv[4]
+   inp5 = sys.argv[5]
+   inp6 = sys.argv[6]
+   inp7 = sys.argv[7]
+   inp8 = sys.argv[8]
+   
 
-    inp1 = 3
-    inp2 = 0
-    inp3 = 2
-    inp4 = 1000
-    inp5 = 20
-    inp6 = -5
-    inp7 = 5
-    inp8 = 1000
-
-    quality_diversity(inp1,inp2,inp3,inp4,inp5,inp6,inp7,inp8)
+   inp1 = int(inp1)
+   inp2 = int(inp2)
+   inp3 = int(inp3)
+   inp4 = int(inp4)
+   inp5 = int(inp5)
+   inp6 = int(inp6)
+   inp7 = int(inp7)
+   inp8 = int(inp8)
+   quality_diversity(inp1,inp2,inp3,inp4,inp5,inp6,inp7,inp8)
