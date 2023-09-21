@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=ciao
+#SBATCH --job-name=f1
 #SBATCH --array=0-##jobs_count##
 #SBATCH --clusters=serial
 #SBATCH --partition=serial_std
@@ -16,24 +16,27 @@
 
 import sys
 
+function="1"
+
+mkdir results_$function
 for run in {1..10}; do
     # Crea una cartella per ogni esecuzione
-    mkdir run_$run
 
     # Definisci gli argomenti per lo script Python
-    function="5"
+    #function="1"
     instance="0"
     dimension="2"
-    initial_size="100000"
+    initial_size="10000"
     best_size="5"
     lb="-5"
     ub="5"
     iterations="1000"
-   
-
+    cd results_$function
+    mkdir run_$run
+    cd ..
 
    # Esegui lo script Python con gli argomenti
    python main.py "$function" "$instance" "$dimension" "$initial_size" "$best_size" "$lb" "$ub" "$iterations"
-   mv $function* run_$run
+   mv $function* results_$function/run_$run_$function
 
 done
