@@ -8,7 +8,7 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
     # n_samples = 100  # Numero di campioni
     # n_dimensions = 3  # Dimensione dello spazio
     # Definisci i limiti inferiori e superiori per ciascuna dimensione
-    lower_bound =  [lb]* dimension # Esempio di limiti inferiori
+    lower_bound = [lb]* dimension # Esempio di limiti inferiori
     upper_bound = [ub]* dimension   # Esempio di limiti superiori
     # Genera il campione LHS
     # lhs_sample = lhs(dimension, samples=initial_size, criterion='maximin')
@@ -71,14 +71,20 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
         loss_store = np.array([])
         loss_swap = np.array([])
         new_array = []
+        index_to_swap = []
         for j in range(len(index)):
             ind_swap = index[j]
             for i in range(size_best, len(sample_ord)):
                 # Creare una copia dell'array iniziale per effettuare lo scambio
                 array_new = np.copy(sample_ord)
-
-                # Effettuare lo scambio tra il numero in posizione 4 e il numero in posizione i
-                array_new[ind_swap], array_new[i] = array_new[i], array_new[i]
+                array_new = np.copy(sample_ord)
+                temp = sample_ord[ind_swap]
+                print(temp)
+                # Assegna il valore dell'altro elemento al primo
+                array_new[ind_swap] = array_new[i]
+                print(temp)
+                # Assegna il valore temporaneo al secondo elemento
+                array_new[i] = temp
 
                 min_dist_swap = np.zeros((size_best,))
                 min_index_swap = np.zeros((size_best,))
@@ -89,14 +95,14 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
                 dist_swap[ind_swap] = np.inf  # Imposta la distanza a infinito per il punto stesso
                 # Trova la minima distanza per il punto i
                 min_dist_one_swap = np.min(dist_swap)
-                if min_dist_one_swap > min_dist_one:
+                if min_dist_one_swap > total_min_dist:
                     verified_cond[j] = True
                     loss_new = np.copy(loss)
-                    loss_new[ind_swap] = f(array_new[i]) - f.optimum.y
+                    loss_new[ind_swap] = f(array_new[ind_swap]) - f.optimum.y
                     loss_swap = np.append(loss_swap, loss_new[ind_swap])
                     loss1= np.mean(loss_new[:size_best])
                     loss_store=np.append(loss_store, loss1)
-                    index_to_swap = i
+                    index_to_swap.append(i)
 
                     # Aggiungere l'array modificato alla lista
                     new_array.append(array_new)
@@ -114,8 +120,18 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
         a = loss[index[ind_loss]]
         loss[index[ind_loss]] = loss_swap[ind_loss]
         loss[index_to_swap] = a
-        mean_loss=np.mean(loss[:size_best])
-        sample_ord= new_array[ind_loss]
+        mean_loss = np.mean(loss[:size_best])
+        sample_ord = new_array[ind_loss]
+
+
+
+
+        # loss = np.copy(loss)
+        # a = loss[index[ind_loss]]
+        # loss[index[ind_loss]] = loss_swap[ind_loss]
+        # loss[index_to_swap] = a
+        # mean_loss=np.mean(loss[:size_best])
+        # sample_ord= new_array[ind_loss]
 
 
 
@@ -130,23 +146,23 @@ if __name__ == "__main__":
    # inp7 = int(input("ub: "))
    # inp8 = int(input("iterations: "))
 
-   inp1 = sys.argv[1]
-   inp2 = sys.argv[2]
-   inp3 = sys.argv[3]
-   inp4 = sys.argv[4]
-   inp5 = sys.argv[5]
-   inp6 = sys.argv[6]
-   inp7 = sys.argv[7]
-   inp8 = sys.argv[8]
+   # inp1 = sys.argv[1]
+   # inp2 = sys.argv[2]
+   # inp3 = sys.argv[3]
+   # inp4 = sys.argv[4]
+   # inp5 = sys.argv[5]
+   # inp6 = sys.argv[6]
+   # inp7 = sys.argv[7]
+   # inp8 = sys.argv[8]
 
-   # inp1 = 5
-   # inp2 = 0
-   # inp3 = 2
-   # inp4 = 10000
-   # inp5 = 20
-   # inp6 = -5
-   # inp7 = 5
-   # inp8 = 1000
+   inp1 = 5
+   inp2 = 0
+   inp3 = 2
+   inp4 = 10000
+   inp5 = 20
+   inp6 = -5
+   inp7 = 5
+   inp8 = 1000
    
 
    inp1 = int(inp1)
