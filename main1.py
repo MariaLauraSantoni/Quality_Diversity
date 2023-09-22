@@ -1,7 +1,7 @@
 import numpy as np
 #from pyDOE2 import lhs
 from ioh import get_problem, ProblemClass
-# import sys
+import sys
 
 
 def quality_diversity(function, instance, dimension, initial_size, size_best, lb, ub, iterations):
@@ -84,10 +84,10 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
                 # Creare una copia dell'array iniziale per effettuare lo scambio
                 array_new = np.copy(sample_ord)
                 temp = sample_ord[ind_swap]
-                print(temp)
+                #print(temp)
                 # Assegna il valore dell'altro elemento al primo
                 array_new[ind_swap] = array_new[i]
-                print(temp)
+                #print(temp)
                 # Assegna il valore temporaneo al secondo elemento
                 array_new[i] = temp
                 # Effettuare lo scambio tra il numero in posizione 4 e il numero in posizione i
@@ -106,14 +106,8 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
                     verified_cond[j] = True
                     #ora sono scambiati quindi sto facendo quello scambiato - quello vecchio della coppia migliore
                     dist_store.append(dist_swap)
-                    #diff_store.append(f(array_new[ind_swap])-f(array_new[i]))
-                    diff_store.append(f(array_new[ind_swap]))
-                    # loss_new = np.copy(loss)
-                    # loss_new[ind_swap] = f(array_new[i]) - f.optimum.y
-                    # loss_swap = np.append(loss_swap, loss_new[ind_swap])
-                    # loss1= np.mean(loss_new[:size_best])
-                    # loss_store=np.append(loss_store, loss1)
-                    # index_to_swap = i
+                    diff_store.append(f(array_new[ind_swap])-f(array_new[i]))
+                    #diff_store.append(f(array_new[ind_swap]))
                     # Aggiungere l'array modificato alla lista
                     new_array.append(array_new)
                     index_to_swap.append(i)
@@ -124,20 +118,31 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
             break  # Passa all'iterazione successiva del ciclo esterno
         elif all(element is True for element in verified_cond):
             ind_loss = np.argmin(diff_store)
+            sample_ord = new_array[ind_loss]
+            # new_loss = f(sample_ord[index[ind_loss]]) - f.optimum.y
+            mean_loss = (mean_loss * size_best + diff_store[ind_loss]) / size_best
+            # min_dist_new = np.copy(min_dist)
+            min_dist[index[ind_loss], :] = dist_store[ind_loss]
+            min_dist[:, index[ind_loss]] = dist_store[ind_loss]
+            total_min_dist = np.min(min_dist)
+            # Trova gli indici della prima occorrenza del valore minimo nella matrice
+            index = np.argmin(min_dist)
+            index = np.unravel_index(index, min_dist.shape)
         elif verified_cond.count(True) == 1:
             ind_loss = verified_cond.index(True)
+            sample_ord = new_array[0]
+            # new_loss = f(sample_ord[index[ind_loss]]) - f.optimum.y
+            mean_loss = (mean_loss * size_best + diff_store[0]) / size_best
+            # min_dist_new = np.copy(min_dist)
+            min_dist[index[ind_loss], :] = dist_store[0]
+            min_dist[:, index[ind_loss]] = dist_store[0]
+            total_min_dist = np.min(min_dist)
+            # Trova gli indici della prima occorrenza del valore minimo nella matrice
+            index = np.argmin(min_dist)
+            index = np.unravel_index(index, min_dist.shape)
 
 
-        sample_ord = new_array[ind_loss]
-        # new_loss = f(sample_ord[index[ind_loss]]) - f.optimum.y
-        mean_loss = (mean_loss * size_best + diff_store[ind_loss] - f(new_array[ind_loss][index_to_swap][ind_loss]))/size_best
-        #min_dist_new = np.copy(min_dist)
-        min_dist[index[ind_loss], :] = dist_store[ind_loss]
-        min_dist[:, index[ind_loss]] = dist_store[ind_loss]
-        total_min_dist = np.min(min_dist)
-        # Trova gli indici della prima occorrenza del valore minimo nella matrice
-        index = np.argmin(min_dist)
-        index = np.unravel_index(index, min_dist.shape)
+
 
 
 
@@ -152,23 +157,23 @@ if __name__ == "__main__":
     # inp7 = int(input("ub: "))
     # inp8 = int(input("iterations: "))
 
-    # inp1 = sys.argv[1]
-    # inp2 = sys.argv[2]
-    # inp3 = sys.argv[3]
-    # inp4 = sys.argv[4]
-    # inp5 = sys.argv[5]
-    # inp6 = sys.argv[6]
-    # inp7 = sys.argv[7]
-    # inp8 = sys.argv[8]
+    inp1 = sys.argv[1]
+    inp2 = sys.argv[2]
+    inp3 = sys.argv[3]
+    inp4 = sys.argv[4]
+    inp5 = sys.argv[5]
+    inp6 = sys.argv[6]
+    inp7 = sys.argv[7]
+    inp8 = sys.argv[8]
 
-    inp1 = 5
-    inp2 = 0
-    inp3 = 2
-    inp4 = 10000
-    inp5 = 20
-    inp6 = -5
-    inp7 = 5
-    inp8 = 100
+    # inp1 = 16
+    # inp2 = 0
+    # inp3 = 2
+    # inp4 = 10000
+    # inp5 = 5
+    # inp6 = -5
+    # inp7 = 5
+    # inp8 = 200
 
     inp1 = int(inp1)
     inp2 = int(inp2)
