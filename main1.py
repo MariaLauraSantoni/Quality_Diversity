@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 #from pyDOE2 import lhs
 from ioh import get_problem, ProblemClass
@@ -31,10 +33,28 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
     for i in random_sample:
         values = np.append(values, f(i))
     # Ottieni gli indici per il riordino
+    before_sort = time.process_time()
+    #print(before_sort)
     ind = np.argsort(values)
     # Applica il riordino agli array di punti e punti legati
     values_ord = values[ind]
     sample_ord = random_sample[ind]
+    # Specifica il percorso del file in cui desideri scrivere i dati
+    file_path = str(function) + '_' + str(instance) + '_' + str(dimension) + '_' + str(initial_size) + '_' + str(
+            size_best) + '_' + str(lb) + '_' + str(ub) + '_' + str(iterations) + '_sample_values.txt'
+
+    # Usa numpy.savetxt per scrivere i dati in due colonne separate
+    np.savetxt(file_path, np.column_stack((values_ord, sample_ord)), delimiter='\t', header="f(x)\tx", comments='')
+
+    # Opzionalmente, puoi specificare il delimiter per separare le colonne (nel caso sopra, ho usato il tab '\t')
+    # e un'intestazione per le colonne. I commenti sono impostati su '' per evitare commenti nel file.
+    # with open(str(function) + '_' + str(instance) + '_' + str(dimension) + '_' + str(initial_size) + '_' + str(
+    #         size_best) + '_' + str(lb) + '_' + str(ub) + '_' + str(iterations) + '_sample_values.txt', 'a') as file:
+    #     # Scrivi i valori separati da uno spazio sulla stessa riga
+    #     line = f'{values_ord} {sample_ord}\n'  # Usiamo '\n' per andare a capo dopo ogni riga
+    #     file.write(line)
+    sort= time.process_time()
+    #print(sort)
     loss = values_ord - f.optimum.y
     # Calcolo average value of the function loss tra i primi 20 valori migliori LEI LA VOGLIO SALVARE IN UN FILE OGNI ITERAZIONE
     mean_loss = np.mean(loss[:size_best])
@@ -103,6 +123,7 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
                 # Trova la minima distanza per il punto i
                 min_dist_one_swap = np.min(dist_swap)
                 if min_dist_one_swap > total_min_dist:
+                    #print(total_min_dist)
                     verified_cond[j] = True
                     #ora sono scambiati quindi sto facendo quello scambiato - quello vecchio della coppia migliore
                     dist_store.append(dist_swap)
@@ -111,6 +132,7 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
                     # Aggiungere l'array modificato alla lista
                     new_array.append(array_new)
                     index_to_swap.append(i)
+                    #print(i)
                     break
 
         if all(element is False for element in verified_cond):
@@ -157,23 +179,23 @@ if __name__ == "__main__":
     # inp7 = int(input("ub: "))
     # inp8 = int(input("iterations: "))
 
-    inp1 = sys.argv[1]
-    inp2 = sys.argv[2]
-    inp3 = sys.argv[3]
-    inp4 = sys.argv[4]
-    inp5 = sys.argv[5]
-    inp6 = sys.argv[6]
-    inp7 = sys.argv[7]
-    inp8 = sys.argv[8]
+    # inp1 = sys.argv[1]
+    # inp2 = sys.argv[2]
+    # inp3 = sys.argv[3]
+    # inp4 = sys.argv[4]
+    # inp5 = sys.argv[5]
+    # inp6 = sys.argv[6]
+    # inp7 = sys.argv[7]
+    # inp8 = sys.argv[8]
 
-    # inp1 = 16
-    # inp2 = 0
-    # inp3 = 2
-    # inp4 = 10000
-    # inp5 = 5
-    # inp6 = -5
-    # inp7 = 5
-    # inp8 = 200
+    inp1 = 5
+    inp2 = 0
+    inp3 = 2
+    inp4 = 10000
+    inp5 = 5
+    inp6 = -5
+    inp7 = 5
+    inp8 = 1000
 
     inp1 = int(inp1)
     inp2 = int(inp2)
