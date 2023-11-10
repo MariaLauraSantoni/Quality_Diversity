@@ -4,7 +4,7 @@ import numpy as np
 #from pyDOE2 import lhs
 from ioh import get_problem, ProblemClass
 import sys
-
+import pandas as pd
 
 def quality_diversity(function, instance, dimension, initial_size, size_best, lb, ub, iterations):
     # Definisci il numero di campioni e la dimensione dello spazio
@@ -45,7 +45,12 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
 
     # Usa numpy.savetxt per scrivere i dati in due colonne separate
     np.savetxt(file_path, np.column_stack((values_ord, sample_ord)), delimiter='\t', header="f(x)\tx", comments='')
-
+    # Calcola la distanza euclidea tra ogni coppia di punti
+    distances = np.sqrt(np.sum((sample_ord[:, np.newaxis] - sample_ord) ** 2, axis=-1))
+    # Crea un DataFrame pandas utilizzando la matrice delle distanze
+    df_distances = pd.DataFrame(distances)
+    # Salva il DataFrame in un file CSV
+    df_distances.to_csv('distanze.csv', index=False)
     # Opzionalmente, puoi specificare il delimiter per separare le colonne (nel caso sopra, ho usato il tab '\t')
     # e un'intestazione per le colonne. I commenti sono impostati su '' per evitare commenti nel file.
     # with open(str(function) + '_' + str(instance) + '_' + str(dimension) + '_' + str(initial_size) + '_' + str(
@@ -59,6 +64,7 @@ def quality_diversity(function, instance, dimension, initial_size, size_best, lb
     # Calcolo average value of the function loss tra i primi 20 valori migliori LEI LA VOGLIO SALVARE IN UN FILE OGNI ITERAZIONE
     mean_loss = np.mean(loss[:size_best])
     # print(mean_loss)
+
 
     # Supponiamo che 'punti' sia una matrice NumPy con ogni riga rappresentante un punto n-dimensionale.
     # Ad esempio, punti.shape sarà (numero_di_punti, n_dimensioni).
