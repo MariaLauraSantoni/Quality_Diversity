@@ -38,5 +38,5 @@ for run in {1..10}; do
     # Esegui lo script Python con gli argomenti
     python main.py "$function" "$instance" "$dimension" "$initial_size" "$best_size" "$lb" "$ub" "$iterations"
     mv ${function}_* results_$function/run_$run
-
+    mv distance* results_$function/run_$run
 done
